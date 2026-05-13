@@ -457,104 +457,13 @@
 <body>
     <header>
         <h1>Habit Tracker</h1>
-        <p class="subtitle">Building consistency, one day at a time</p>
+        <p class="subtitle">The Only Way</p>
         <nav>
             <button class="nav-btn active" onclick="showPage('tracker')">Tracker</button>
             <button class="nav-btn" onclick="showPage('exercise')">Exercise Schedule</button>
             <button class="nav-btn" onclick="showPage('instructions')">How to Use</button>
         </nav>
     </header>
-
-    <!-- Instructions Page -->
-    <div id="instructions-page" class="page">
-        <div class="tracker-section">
-            <h2 class="section-title">📖 How to Use Your Habit Tracker</h2>
-            
-            <div style="max-width: 900px;">
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-blue);">1️⃣ Tracking Your Habits (Calendar)</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    • The calendar shows all your 8 daily habits<br>
-                    • <strong>Click on any dot</strong> to mark that habit as complete for that day<br>
-                    • Gray dot = not done yet, Blue dot = completed ✓<br>
-                    • Use the ← → arrows next to the month name to navigate between months<br>
-                    • Your progress is saved automatically in your browser
-                </p>
-
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-green);">2️⃣ Sleep Duration Tracker</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    • Select the date from the date picker<br>
-                    • Enter how many hours you slept (example: 7.5 for 7 hours 30 minutes)<br>
-                    • Click "Add Sleep Data" button<br>
-                    • The graph will update automatically showing your sleep pattern for the month<br>
-                    • The graph shows all days 1-31 on the x-axis and hours (0-12) on the y-axis
-                </p>
-
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-coral);">3️⃣ Meal Timing Tracker</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    • Select the date<br>
-                    • Pick the time for each meal using the time pickers:<br>
-                    &nbsp;&nbsp;- Breakfast time (example: 08:30)<br>
-                    &nbsp;&nbsp;- Lunch time (example: 13:00)<br>
-                    &nbsp;&nbsp;- Dinner time (example: 20:30)<br>
-                    • Click "Add Meal Times" button<br>
-                    • The graph shows three colored lines representing your meal times throughout the month<br>
-                    &nbsp;&nbsp;- 🟡 Orange line = Breakfast times<br>
-                    &nbsp;&nbsp;- 🟠 Coral line = Lunch times<br>
-                    &nbsp;&nbsp;- 🔵 Dark teal line = Dinner times<br>
-                    • Below the inputs, you'll see statistics showing:<br>
-                    &nbsp;&nbsp;- Average time gap between breakfast and lunch<br>
-                    &nbsp;&nbsp;- Average time gap between lunch and dinner<br>
-                    &nbsp;&nbsp;- Total days tracked
-                </p>
-
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-blue);">4️⃣ Exercise Schedule</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    • Click on "Exercise Schedule" tab at the top<br>
-                    • View your weekly workout routine in the table<br>
-                    • Scroll down to see the Exercise Library with detailed instructions<br>
-                    • <strong>Click on any exercise name</strong> (the blue headings) to watch the YouTube tutorial<br>
-                    • Each exercise card shows: benefits, sets/reps, instructions, and duration<br>
-                    • To update YouTube links: Right-click on the HTML file → Open with text editor → Search for "youtube.com" and replace the URLs
-                </p>
-
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-green);">💡 Important Notes</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    • All your data is stored in your browser (not online)<br>
-                    • Don't clear your browser data/cache, or you'll lose your tracking history<br>
-                    • Use the same browser and device to maintain your data<br>
-                    • The tracker covers May-December 2026<br>
-                    • Graphs update automatically when you change months using the arrows<br>
-                    • For best experience, use on desktop/laptop (mobile works but smaller screen)
-                </p>
-
-                <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 2rem 0 1rem 0; color: var(--accent-coral);">🔧 Customizing Your Tracker</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8;">
-                    <strong>To change YouTube video links:</strong><br>
-                    1. Right-click the HTML file → Open With → Notepad/Text Editor<br>
-                    2. Press Ctrl+F and search for: <code>window.open('https://www.youtube.com/watch?v=</code><br>
-                    3. Replace the YouTube video ID with your preferred video<br>
-                    4. Save the file<br><br>
-                    
-                    <strong>To add more habits:</strong><br>
-                    1. Open the file in a text editor<br>
-                    2. Find the line: <code>const habits = [</code><br>
-                    3. Add your new habit to the list in quotes<br>
-                    4. Save the file
-                </p>
-
-                <div style="background: #f8f8f6; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border-left: 4px solid var(--accent-blue);">
-                    <strong style="font-size: 1.1rem;">💪 Quick Start:</strong><br>
-                    <p style="margin-top: 0.5rem;">
-                    1. Click dots on the calendar to track daily habits<br>
-                    2. Add today's sleep hours and meal times<br>
-                    3. Check the Exercise Schedule tab for your workout<br>
-                    4. Repeat daily and watch your progress grow! 🎯
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Tracker Page -->
     <div id="tracker-page" class="page active">
         <!-- Calendar Section -->
@@ -582,7 +491,7 @@
                 </div>
                 <div class="input-group">
                     <label>Hours Slept</label>
-                    <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="8" />
+                    <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="0" />
                 </div>
                 <button class="btn-primary" onclick="addSleepData()">Add Sleep Data</button>
             </div>
@@ -779,7 +688,7 @@
         
         const GOOGLE_SHEETS_CONFIG = {
             enabled: false, // Set to true after setup
-            scriptURL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE', // Paste your deployed web app URL here
+            scriptURL: 'https://script.google.com/macros/s/AKfycbyTpLCQ8gNh7cFuBEk8XMagjRelNpMNfaX3GvvmSytQXwxFPeHOHc3kr-sdFruOJ7Yhiw/exec', // Paste your deployed web app URL here
         };
         
         // ============================================
