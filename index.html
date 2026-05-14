@@ -2,1159 +2,1108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Habit Tracker 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg-primary: #fafaf8;
-            --bg-secondary: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --border-color: #e0e0e0;
-            --accent-blue: #2d5f8d;
-            --accent-green: #4a7c59;
-            --accent-coral: #d97757;
-            --breakfast-color: #f4a261;
-            --lunch-color: #e76f51;
-            --dinner-color: #264653;
-            --dot-inactive: #d4d4d4;
-            --dot-active: #2d5f8d;
-            --sleep-line: #4a7c59;
+            --bg: #f7f7f5;
+            --card: #ffffff;
+            --border: #e4e4e0;
+            --text: #1a1a1a;
+            --muted: #777777;
+            --blue: #2d5f8d;
+            --green: #4a7c59;
+            --coral: #d97757;
+            --orange: #f4a261;
+            --red-light: #e76f51;
+            --navy: #264653;
+            --dot-off: #d8d8d8;
+            --radius: 12px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Work Sans', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
         }
 
+        /* ── HEADER ── */
         header {
-            margin-bottom: 3rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 2rem;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
         }
 
         h1 {
             font-family: 'Fraunces', serif;
-            font-size: 3.5rem;
+            font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            font-weight: 300;
+        .today-badge {
+            font-size: 0.75rem;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            white-space: nowrap;
         }
 
-        nav {
-            margin-top: 2rem;
+        /* ── BOTTOM NAV (mobile) ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
             display: flex;
-            gap: 1rem;
+            z-index: 200;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
         }
 
         .nav-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            flex: 1;
+            padding: 0.7rem 0.4rem 0.55rem;
+            background: none;
+            border: none;
             cursor: pointer;
             font-family: 'Work Sans', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.68rem;
             font-weight: 500;
-            transition: all 0.2s ease;
-            color: var(--text-primary);
-        }
-
-        .nav-btn:hover {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            border-color: var(--text-primary);
-        }
-
-        .nav-btn.active {
-            background: var(--accent-blue);
-            color: white;
-            border-color: var(--accent-blue);
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Calendar Section */
-        .calendar-container {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .month-header {
+            color: var(--muted);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
+            gap: 0.2rem;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
         }
 
+        .nav-btn .icon { font-size: 1.25rem; transition: transform 0.2s; }
+        .nav-btn.active { color: var(--blue); }
+        .nav-btn.active .icon { transform: translateY(-2px); }
+
+        /* ── PAGES ── */
+        .page { display: none; padding: 1rem; }
+        .page.active { display: block; animation: fadeUp 0.25s ease; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 1.1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* ── MONTH NAV ── */
         .month-nav {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
         }
 
-        .month-title {
+        .month-label {
             font-family: 'Fraunces', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            min-width: 200px;
-            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 700;
         }
 
         .arrow-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 34px; height: 34px;
+            font-size: 0.95rem;
             cursor: pointer;
-            padding: 0.5rem;
-            color: var(--text-secondary);
-            transition: color 0.2s ease;
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            touch-action: manipulation;
+            transition: all 0.15s ease;
         }
 
-        .arrow-btn:hover {
-            color: var(--text-primary);
+        .arrow-btn:active { background: var(--border); transform: scale(0.95); }
+
+        /* ── SWIPE HINT ── */
+        .swipe-hint {
+            text-align: center;
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ── CALENDAR GRID ── */
+        .calendar-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            border: 1px solid var(--border);
         }
 
         .habit-grid {
             display: grid;
-            grid-template-columns: 200px repeat(31, 1fr);
-            gap: 0;
-            font-size: 0.85rem;
+            min-width: max-content;
+            font-size: 0.68rem;
         }
 
-        .habit-name {
-            padding: 1rem 0.5rem;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .day-cell {
-            padding: 1rem 0.5rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .habit-row-cell {
-            padding: 1rem 0.5rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .habit-row-cell:hover {
-            background: #f5f5f5;
-        }
-
-        .habit-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--dot-inactive);
-            transition: all 0.2s ease;
-        }
-
-        .habit-dot.completed {
-            background: var(--dot-active);
-            transform: scale(1.2);
-        }
-
-        /* Sleep Tracker */
-        .tracker-section {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .section-title {
-            font-family: 'Fraunces', serif;
-            font-size: 1.8rem;
+        .grid-corner {
+            background: #f2f2f0;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            padding: 0.45rem 0.5rem;
+            position: sticky;
+            left: 0;
+            z-index: 20;
+            font-size: 0.6rem;
+            color: var(--muted);
             font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .sleep-input-container {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: end;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .input-group label {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .input-group input {
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            padding: 0.75rem 1.5rem;
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Work Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background: #234a6d;
-            transform: translateY(-1px);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-top: 1rem;
-        }
-
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* Meal Timing Tracker */
-        .meal-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .meal-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .meal-input-group label {
-            font-weight: 500;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .meal-input-row {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .meal-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #f8f8f6;
-            border-radius: 8px;
-        }
-
-        .stat-card {
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-family: 'Fraunces', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* Exercise Page */
-        .exercise-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 3rem;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .exercise-table th {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
         }
 
-        .exercise-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
+        .grid-day-hdr {
+            background: #f2f2f0;
+            border-bottom: 1px solid var(--border);
+            border-left: 1px solid var(--border);
+            text-align: center;
+            padding: 0.45rem 0;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .exercise-table tr:last-child td {
-            border-bottom: none;
+        .grid-day-hdr.today-col { color: var(--blue); font-weight: 700; }
+
+        .habit-label {
+            padding: 0.55rem 0.5rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            font-size: 0.66rem;
+            position: sticky;
+            left: 0;
+            background: var(--card);
+            z-index: 10;
+            line-height: 1.25;
+            min-height: 34px;
         }
 
-        .exercise-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .exercise-card {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .exercise-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-
-        .exercise-card h3 {
-            font-family: 'Fraunces', serif;
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            color: var(--accent-blue);
+        .habit-cell {
+            border-bottom: 1px solid var(--border);
+            border-left: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: color 0.2s ease;
+            transition: background 0.15s;
+            touch-action: manipulation;
+            min-height: 34px;
         }
 
-        .exercise-card h3:hover {
-            color: var(--accent-green);
+        .habit-cell:active { background: #f0f0ee; }
+        .habit-cell.today-col { background: rgba(45,95,141,0.04); }
+
+        .dot {
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            background: var(--dot-off);
+            transition: all 0.2s ease;
+            pointer-events: none;
         }
 
-        .exercise-card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
+        .dot.done {
+            background: var(--blue);
+            transform: scale(1.3);
+            box-shadow: 0 0 0 2px rgba(45,95,141,0.18);
         }
 
-        .exercise-meta {
+        /* ── FORM ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .field.full { grid-column: 1 / -1; }
+
+        .field label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .field input {
+            padding: 0.65rem 0.75rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.92rem;
+            background: var(--bg);
+            color: var(--text);
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(45,95,141,0.1);
+            background: var(--card);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: all 0.2s ease;
+        }
+
+        .btn:active { transform: scale(0.98); background: #234a6d; }
+
+        /* ── STATS ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.85rem;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.7rem 0.4rem;
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-box .lbl {
+            font-size: 0.62rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.3;
+        }
+
+        /* ── CHART ── */
+        .chart-wrap {
+            position: relative;
+            height: 210px;
+            margin-top: 1rem;
+        }
+
+        .legend-row {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            flex-wrap: wrap;
+            margin-top: 0.6rem;
         }
 
-        .youtube-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: var(--accent-coral);
-            text-decoration: none;
+        .leg-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            color: var(--muted);
             font-weight: 500;
-            transition: color 0.2s ease;
         }
 
-        .youtube-link:hover {
-            color: var(--accent-blue);
+        .leg-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        code {
-            background: #e8e8e6;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-blue);
+        /* ── EXERCISE ── */
+        .section-heading {
+            font-family: 'Fraunces', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 1rem 0 0.6rem;
         }
 
-        @media (max-width: 1200px) {
-            .habit-grid {
-                font-size: 0.75rem;
-                grid-template-columns: 150px repeat(31, 1fr);
-            }
+        .week-grid { display: grid; gap: 0.5rem; }
+
+        .day-row {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 0.6rem;
+            align-items: start;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.7rem 0.8rem;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+        .day-name {
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: var(--blue);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding-top: 0.1rem;
+        }
+
+        .day-exercises {
+            font-size: 0.8rem;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .day-dur {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 0.15rem;
+            font-weight: 500;
+        }
+
+        .ex-cards { display: grid; gap: 0.65rem; }
+
+        .ex-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .ex-card h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 0.98rem;
+            color: var(--blue);
+            cursor: pointer;
+            margin-bottom: 0.45rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.2s;
+            line-height: 1.3;
+        }
+
+        .ex-card h3:active { color: var(--green); }
+
+        .yt-badge {
+            font-size: 0.6rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.12rem 0.35rem;
+            border-radius: 3px;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .ex-card p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.55;
+            margin-bottom: 0.25rem;
+        }
+
+        .ex-tags {
+            display: flex;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+            margin-top: 0.55rem;
+        }
+
+        .tag {
+            font-size: 0.67rem;
+            padding: 0.18rem 0.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .tag.b { border-color: rgba(45,95,141,0.3);  color: var(--blue);  background: rgba(45,95,141,0.06); }
+        .tag.g { border-color: rgba(74,124,89,0.3);  color: var(--green); background: rgba(74,124,89,0.06); }
+        .tag.c { border-color: rgba(217,119,87,0.3); color: var(--coral); background: rgba(217,119,87,0.06); }
+
+        /* ── DESKTOP ── */
+        @media (min-width: 768px) {
+            body { padding-bottom: 0; }
+
+            header { position: static; padding: 1.5rem 2rem 0; }
+            h1 { font-size: 2rem; }
+
+            .bottom-nav {
+                position: static;
+                border-top: none;
+                border-bottom: 1px solid var(--border);
+                box-shadow: none;
+                padding: 0 2rem;
+                justify-content: flex-start;
+                gap: 0;
             }
 
-            h1 {
-                font-size: 2.5rem;
+            .nav-btn {
+                flex: none;
+                flex-direction: row;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.88rem;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+                gap: 0.4rem;
             }
 
-            .habit-grid {
-                overflow-x: auto;
-            }
+            .nav-btn .icon { font-size: 1rem; }
+            .nav-btn.active { border-bottom-color: var(--blue); background: none; }
 
-            .exercise-list {
-                grid-template-columns: 1fr;
-            }
+            .page { padding: 1.5rem 2rem; max-width: 1300px; margin: 0 auto; }
+
+            .habit-grid { font-size: 0.78rem; }
+            .habit-label { font-size: 0.76rem; min-height: 38px; }
+            .dot { width: 11px; height: 11px; }
+            .habit-cell { min-height: 38px; }
+
+            .form-grid { grid-template-columns: repeat(4, 1fr); }
+            .field.full { grid-column: span 2; }
+
+            .chart-wrap { height: 270px; }
+
+            .week-grid { grid-template-columns: 1fr 1fr; }
+            .ex-cards  { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1100px) {
+            .ex-cards { grid-template-columns: repeat(3, 1fr); }
+            .week-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 360px) {
+            .card { padding: 0.85rem; }
+            h1 { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
-    <header>
+
+<header>
+    <div class="header-top">
         <h1>Habit Tracker</h1>
-        <p class="subtitle">The Only Way</p>
-        <nav>
-            <button class="nav-btn active" onclick="showPage('tracker')">Tracker</button>
-            <button class="nav-btn" onclick="showPage('exercise')">Exercise Schedule</button>
-        </nav>
-    </header>
-    <!-- Tracker Page -->
-    <div id="tracker-page" class="page active">
-        <!-- Calendar Section -->
-        <div class="calendar-container">
-            <div class="month-header">
-                <div class="month-nav">
-                    <button class="arrow-btn" onclick="changeMonth(-1)">←</button>
-                    <h2 class="month-title" id="current-month">May 2026</h2>
-                    <button class="arrow-btn" onclick="changeMonth(1)">→</button>
-                </div>
-            </div>
+        <span class="today-badge" id="today-badge">—</span>
+    </div>
+</header>
 
-            <div class="habit-grid" id="habit-grid">
-                <!-- Generated by JavaScript -->
+<nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showPage('tracker', this)">
+        <span class="icon">📋</span>Tracker
+    </button>
+    <button class="nav-btn" onclick="showPage('sleep', this)">
+        <span class="icon">🌙</span>Sleep
+    </button>
+    <button class="nav-btn" onclick="showPage('meals', this)">
+        <span class="icon">🍽️</span>Meals
+    </button>
+    <button class="nav-btn" onclick="showPage('exercise', this)">
+        <span class="icon">💪</span>Exercise
+    </button>
+</nav>
+
+<!-- PAGE: TRACKER -->
+<div id="tracker-page" class="page active">
+    <div class="card" style="padding: 0.85rem;">
+        <div class="month-nav">
+            <button class="arrow-btn" onclick="changeMonth(-1)">←</button>
+            <span class="month-label" id="month-label">May 2026</span>
+            <button class="arrow-btn" onclick="changeMonth(1)">→</button>
+        </div>
+        <div class="swipe-hint">👆 Tap a dot to mark complete &nbsp;·&nbsp; ← Swipe to scroll →</div>
+        <div class="calendar-scroll">
+            <div class="habit-grid" id="habit-grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- PAGE: SLEEP -->
+<div id="sleep-page" class="page">
+    <div class="card">
+        <div class="card-title">🌙 Sleep Duration</div>
+        <div class="form-grid">
+            <div class="field">
+                <label>Date</label>
+                <input type="date" id="sleep-date">
+            </div>
+            <div class="field">
+                <label>Hours Slept</label>
+                <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="7.5">
             </div>
         </div>
+        <button class="btn" onclick="addSleepData()">Add Sleep Entry</button>
 
-        <!-- Sleep Tracker -->
-        <div class="tracker-section">
-            <h2 class="section-title">Sleep Duration</h2>
-            <div class="sleep-input-container">
-                <div class="input-group">
-                    <label>Date</label>
-                    <input type="date" id="sleep-date" />
-                </div>
-                <div class="input-group">
-                    <label>Hours Slept</label>
-                    <input type="number" id="sleep-hours" min="0" max="24" step="0.5" placeholder="0" />
-                </div>
-                <button class="btn-primary" onclick="addSleepData()">Add Sleep Data</button>
-            </div>
-            <div class="chart-container">
-                <canvas id="sleep-chart"></canvas>
-            </div>
+        <div class="stats-row">
+            <div class="stat-box"><div class="val" id="avg-sleep">—</div><div class="lbl">Avg Hours</div></div>
+            <div class="stat-box"><div class="val" id="best-sleep">—</div><div class="lbl">Best Night</div></div>
+            <div class="stat-box"><div class="val" id="sleep-days">0</div><div class="lbl">Days Logged</div></div>
         </div>
 
-        <!-- Meal Timing Tracker -->
-        <div class="tracker-section">
-            <h2 class="section-title">Meal Timing</h2>
-            <div class="meal-inputs">
-                <div class="meal-input-group">
-                    <label>Date</label>
-                    <input type="date" id="meal-date" />
-                </div>
-                <div class="meal-input-group">
-                    <label>Breakfast Time</label>
-                    <input type="time" id="breakfast-time" />
-                </div>
-                <div class="meal-input-group">
-                    <label>Lunch Time</label>
-                    <input type="time" id="lunch-time" />
-                </div>
-                <div class="meal-input-group">
-                    <label>Dinner Time</label>
-                    <input type="time" id="dinner-time" />
-                </div>
-            </div>
-            <button class="btn-primary" onclick="addMealData()">Add Meal Times</button>
-            
-            <div class="meal-stats" id="meal-stats">
-                <!-- Generated by JavaScript -->
-            </div>
+        <div class="chart-wrap">
+            <canvas id="sleep-chart"></canvas>
+        </div>
+    </div>
+</div>
 
-            <div class="chart-container" style="height: 400px; margin-top: 2rem;">
-                <canvas id="meal-chart"></canvas>
+<!-- PAGE: MEALS -->
+<div id="meals-page" class="page">
+    <div class="card">
+        <div class="card-title">🍽️ Meal Timing</div>
+        <div class="form-grid">
+            <div class="field full">
+                <label>Date</label>
+                <input type="date" id="meal-date">
+            </div>
+            <div class="field">
+                <label>🌅 Breakfast</label>
+                <input type="time" id="breakfast-time">
+            </div>
+            <div class="field">
+                <label>☀️ Lunch</label>
+                <input type="time" id="lunch-time">
+            </div>
+            <div class="field full">
+                <label>🌆 Dinner</label>
+                <input type="time" id="dinner-time">
+            </div>
+        </div>
+        <button class="btn" onclick="addMealData()">Save Meal Times</button>
+
+        <div class="stats-row">
+            <div class="stat-box"><div class="val" id="bl-gap">—</div><div class="lbl">Bfast → Lunch</div></div>
+            <div class="stat-box"><div class="val" id="ld-gap">—</div><div class="lbl">Lunch → Dinner</div></div>
+            <div class="stat-box"><div class="val" id="meal-days">0</div><div class="lbl">Days Logged</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Monthly Meal Graph</div>
+        <div class="chart-wrap" style="height:240px;">
+            <canvas id="meal-chart"></canvas>
+        </div>
+        <div class="legend-row">
+            <div class="leg-item"><div class="leg-dot" style="background:#f4a261"></div>Breakfast</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#e76f51"></div>Lunch</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#264653"></div>Dinner</div>
+        </div>
+    </div>
+</div>
+
+<!-- PAGE: EXERCISE -->
+<div id="exercise-page" class="page">
+    <div class="card">
+        <div class="card-title">💪 Weekly Schedule</div>
+        <div class="week-grid">
+            <div class="day-row">
+                <div class="day-name">Mon</div>
+                <div><div class="day-exercises">Surya Namaskar · Dumbbell Shoulder Press · Band Chest Fly</div><div class="day-dur">⏱ 30–40 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Tue</div>
+                <div><div class="day-exercises">Bicep Curls · Band Pull-Apart · Core Stretches</div><div class="day-dur">⏱ 25–35 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Wed</div>
+                <div><div class="day-exercises">Surya Namaskar · Dumbbell Squats · Band Leg Extensions</div><div class="day-dur">⏱ 35–45 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Thu</div>
+                <div><div class="day-exercises">Active Rest · Light Stretching · Band Mobility</div><div class="day-dur">⏱ 15–20 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Fri</div>
+                <div><div class="day-exercises">Surya Namaskar · Dumbbell Rows · Band Lat Pulldowns</div><div class="day-dur">⏱ 30–40 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Sat</div>
+                <div><div class="day-exercises">Full Body Circuit — Dumbbells + Bands</div><div class="day-dur">⏱ 40–50 min</div></div>
+            </div>
+            <div class="day-row">
+                <div class="day-name">Sun</div>
+                <div><div class="day-exercises">Rest Day · Light Yoga & Full Stretching</div><div class="day-dur">⏱ 20–30 min</div></div>
             </div>
         </div>
     </div>
 
-    <!-- Exercise Page -->
-    <div id="exercise-page" class="page">
-        <div class="tracker-section">
-            <h2 class="section-title">Weekly Exercise Schedule</h2>
-            <table class="exercise-table">
-                <thead>
-                    <tr>
-                        <th>Day</th>
-                        <th>Exercises</th>
-                        <th>Duration</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Monday</strong></td>
-                        <td>Surya Namaskar, Dumbbell Shoulder Press, Resistance Band Chest Fly</td>
-                        <td>30-40 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tuesday</strong></td>
-                        <td>Dumbbell Bicep Curls, Band Pull-Apart, Core Stretches</td>
-                        <td>25-35 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Wednesday</strong></td>
-                        <td>Surya Namaskar, Dumbbell Squats, Band Leg Extensions</td>
-                        <td>35-45 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Thursday</strong></td>
-                        <td>Active Rest: Light Stretching, Band Mobility Work</td>
-                        <td>15-20 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Friday</strong></td>
-                        <td>Surya Namaskar, Dumbbell Rows, Band Lat Pulldowns</td>
-                        <td>30-40 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Saturday</strong></td>
-                        <td>Full Body: Dumbbells + Bands Circuit Training</td>
-                        <td>40-50 mins</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Sunday</strong></td>
-                        <td>Rest Day / Light Yoga & Stretching</td>
-                        <td>20-30 mins</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="section-heading">Exercise Library</div>
+    <div class="ex-cards">
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=73SYXDH1lNU','_blank')">
+                Surya Namaskar <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Full-body warm-up, flexibility, energy</p>
+            <p><strong>Sets:</strong> 5–12 rounds · Sync breath with movement</p>
+            <div class="ex-tags"><span class="tag g">🧘 Yoga</span><span class="tag">⏱ 10–15 min</span></div>
         </div>
 
-        <div class="tracker-section">
-            <h2 class="section-title">Exercise Library</h2>
-            <div class="exercise-list">
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=73SYXDH1lNU', '_blank')">Surya Namaskar (Sun Salutation)</h3>
-                    <p><strong>Benefits:</strong> Full-body warm-up, improves flexibility, energizes the body</p>
-                    <p><strong>Sets:</strong> 5-12 rounds</p>
-                    <p><strong>Instructions:</strong> Flow through 12 postures smoothly, coordinating breath with movement. Start slow and build speed as you warm up.</p>
-                    <div class="exercise-meta">
-                        <span>🧘 Yoga</span>
-                        <span>⏱️ 10-15 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=gE7JRvs7H_8', '_blank')">Dumbbell Shoulder Press</h3>
-                    <p><strong>Benefits:</strong> Builds shoulder strength, improves upper body stability</p>
-                    <p><strong>Sets:</strong> 3 sets × 10-12 reps</p>
-                    <p><strong>Instructions:</strong> Stand with feet shoulder-width apart. Press dumbbells overhead until arms are fully extended. Lower with control.</p>
-                    <div class="exercise-meta">
-                        <span>🏋️ Strength</span>
-                        <span>⏱️ 8-10 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=ykJmrZ5v0Oo', '_blank')">Resistance Band Chest Fly</h3>
-                    <p><strong>Benefits:</strong> Targets chest muscles, improves shoulder mobility</p>
-                    <p><strong>Sets:</strong> 3 sets × 12-15 reps</p>
-                    <p><strong>Instructions:</strong> Anchor band behind you. Hold handles and bring arms together in front of chest. Focus on squeezing chest muscles.</p>
-                    <div class="exercise-meta">
-                        <span>💪 Resistance</span>
-                        <span>⏱️ 6-8 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=ykJmrZ5v0Oo', '_blank')">Dumbbell Bicep Curls</h3>
-                    <p><strong>Benefits:</strong> Isolates bicep muscles, improves arm strength</p>
-                    <p><strong>Sets:</strong> 3 sets × 10-12 reps</p>
-                    <p><strong>Instructions:</strong> Stand with dumbbells at sides. Curl weights up while keeping elbows stationary. Lower with control.</p>
-                    <div class="exercise-meta">
-                        <span>🏋️ Strength</span>
-                        <span>⏱️ 6-8 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=pQjmXnRETZ0', '_blank')">Band Pull-Apart</h3>
-                    <p><strong>Benefits:</strong> Strengthens upper back, improves posture, shoulder health</p>
-                    <p><strong>Sets:</strong> 3 sets × 15-20 reps</p>
-                    <p><strong>Instructions:</strong> Hold band at shoulder height. Pull apart by squeezing shoulder blades together. Return to start slowly.</p>
-                    <div class="exercise-meta">
-                        <span>💪 Resistance</span>
-                        <span>⏱️ 5-7 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=wXhSl2eKLRs', '_blank')">Dumbbell Squats</h3>
-                    <p><strong>Benefits:</strong> Builds leg strength, improves core stability</p>
-                    <p><strong>Sets:</strong> 3 sets × 12-15 reps</p>
-                    <p><strong>Instructions:</strong> Hold dumbbells at sides. Lower into squat keeping chest up and knees tracking over toes. Drive through heels to stand.</p>
-                    <div class="exercise-meta">
-                        <span>🏋️ Strength</span>
-                        <span>⏱️ 8-10 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=L-Yd2YpIDkI', '_blank')">Dumbbell Rows</h3>
-                    <p><strong>Benefits:</strong> Strengthens back muscles, improves pulling strength</p>
-                    <p><strong>Sets:</strong> 3 sets × 10-12 reps each side</p>
-                    <p><strong>Instructions:</strong> Hinge at hips, support with one hand. Row dumbbell to hip, squeezing shoulder blade. Lower with control.</p>
-                    <div class="exercise-meta">
-                        <span>🏋️ Strength</span>
-                        <span>⏱️ 8-10 mins</span>
-                    </div>
-                </div>
-
-                <div class="exercise-card">
-                    <h3 onclick="window.open('https://www.youtube.com/watch?v=eGo4IYlbE5g', '_blank')">Full Body Stretching Routine</h3>
-                    <p><strong>Benefits:</strong> Increases flexibility, reduces muscle tension, improves recovery</p>
-                    <p><strong>Duration:</strong> 15-20 minutes</p>
-                    <p><strong>Instructions:</strong> Hold each stretch for 20-30 seconds. Focus on major muscle groups: hamstrings, quads, shoulders, chest, and back.</p>
-                    <div class="exercise-meta">
-                        <span>🧘 Flexibility</span>
-                        <span>⏱️ 15-20 mins</span>
-                    </div>
-                </div>
-            </div>
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=gE7JRvs7H_8','_blank')">
+                Dumbbell Shoulder Press <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Shoulder strength and upper-body stability</p>
+            <p><strong>Sets:</strong> 3 × 10–12 reps · Press overhead, lower slow</p>
+            <div class="ex-tags"><span class="tag b">🏋️ Strength</span><span class="tag">⏱ 8–10 min</span></div>
         </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=ykJmrZ5v0Oo','_blank')">
+                Band Chest Fly <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Chest targeting, shoulder mobility</p>
+            <p><strong>Sets:</strong> 3 × 12–15 reps · Squeeze chest at centre</p>
+            <div class="ex-tags"><span class="tag c">💪 Band</span><span class="tag">⏱ 6–8 min</span></div>
+        </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=ykJmrZ5v0Oo','_blank')">
+                Dumbbell Bicep Curls <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Isolates biceps, builds arm strength</p>
+            <p><strong>Sets:</strong> 3 × 10–12 reps · Keep elbows fixed</p>
+            <div class="ex-tags"><span class="tag b">🏋️ Strength</span><span class="tag">⏱ 6–8 min</span></div>
+        </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=pQjmXnRETZ0','_blank')">
+                Band Pull-Apart <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Upper back strength, better posture</p>
+            <p><strong>Sets:</strong> 3 × 15–20 reps · Squeeze shoulder blades</p>
+            <div class="ex-tags"><span class="tag c">💪 Band</span><span class="tag">⏱ 5–7 min</span></div>
+        </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=wXhSl2eKLRs','_blank')">
+                Dumbbell Squats <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Leg strength and core stability</p>
+            <p><strong>Sets:</strong> 3 × 12–15 reps · Drive through heels</p>
+            <div class="ex-tags"><span class="tag b">🏋️ Strength</span><span class="tag">⏱ 8–10 min</span></div>
+        </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=L-Yd2YpIDkI','_blank')">
+                Dumbbell Rows <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Back strength, better posture</p>
+            <p><strong>Sets:</strong> 3 × 10–12 each side · Row to hip</p>
+            <div class="ex-tags"><span class="tag b">🏋️ Strength</span><span class="tag">⏱ 8–10 min</span></div>
+        </div>
+
+        <div class="ex-card">
+            <h3 onclick="window.open('https://www.youtube.com/watch?v=eGo4IYlbE5g','_blank')">
+                Full Body Stretching <span class="yt-badge">▶ YT</span>
+            </h3>
+            <p><strong>Benefits:</strong> Flexibility, muscle recovery, tension relief</p>
+            <p><strong>Duration:</strong> Hold each 20–30 sec · All major groups</p>
+            <div class="ex-tags"><span class="tag g">🧘 Flex</span><span class="tag">⏱ 15–20 min</span></div>
+        </div>
+
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // ============================================
-        // GOOGLE SHEETS CONFIGURATION
-        // ============================================
-        // Follow setup instructions below, then paste your info here:
-        
-        const GOOGLE_SHEETS_CONFIG = {
-            enabled: false, // Set to true after setup
-            scriptURL: 'https://script.google.com/macros/s/AKfycbyTpLCQ8gNh7cFuBEk8XMagjRelNpMNfaX3GvvmSytQXwxFPeHOHc3kr-sdFruOJ7Yhiw/exec', // Paste your deployed web app URL here
-        };
-        
-        // ============================================
-        // SETUP INSTRUCTIONS:
-        // ============================================
-        // 1. Go to https://sheets.google.com and create a new spreadsheet
-        // 2. Name it "Habit Tracker Data"
-        // 3. Create 3 sheets (tabs): "Habits", "Sleep", "Meals"
-        // 4. Go to Extensions → Apps Script
-        // 5. Delete any code and paste the code from the setup section below
-        // 6. Click Deploy → New Deployment → Select type: Web app
-        // 7. Execute as: Me
-        // 8. Who has access: Anyone
-        // 9. Click Deploy, copy the Web app URL
-        // 10. Paste the URL in scriptURL above and set enabled: true
-        // ============================================
-        
-        // Data storage (local backup + cloud sync)
-        let habitData = JSON.parse(localStorage.getItem('habitData')) || {};
-        let sleepData = JSON.parse(localStorage.getItem('sleepData')) || {};
-        let mealData = JSON.parse(localStorage.getItem('mealData')) || {};
-        
-        // Sync with Google Sheets
-        async function syncToGoogleSheets(dataType, data) {
-            if (!GOOGLE_SHEETS_CONFIG.enabled) {
-                console.log('Google Sheets sync disabled - data saved locally only');
-                return;
-            }
-            
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CONFIG.scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        type: dataType,
-                        data: data
-                    })
-                });
-                console.log('Data synced to Google Sheets');
-            } catch (error) {
-                console.error('Sync error:', error);
-            }
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────────────────
+const SHEETS = {
+    enabled: false,
+    scriptURL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
+};
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let habitData = JSON.parse(localStorage.getItem('habitData') || '{}');
+let sleepData  = JSON.parse(localStorage.getItem('sleepData')  || '{}');
+let mealData   = JSON.parse(localStorage.getItem('mealData')   || '{}');
+
+const habits = [
+    'Reading Fatman (10 pg)',
+    'Wake up 5:00–5:30 AM',
+    'Staying Clean',
+    '1 Chapter NISM (RA)',
+    'Morning Stretches & Abs',
+    'Eating Meals on Time',
+    'Evening Run / Jog',
+    'Read News (Hindu/IE)'
+];
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+let curMonth = 4; // May (0-indexed)
+let curYear  = 2026;
+let sleepChart = null;
+let mealChart  = null;
+
+// ── NAV ──────────────────────────────────────────────────────────────────────
+function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id + '-page').classList.add('active');
+    btn.classList.add('active');
+    if (id === 'sleep') { updateSleepChart(); updateSleepStats(); }
+    if (id === 'meals') { updateMealChart();  updateMealStats(); }
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────────────────────
+function changeMonth(dir) {
+    curMonth += dir;
+    if (curMonth > 11) { curMonth = 0; curYear++; }
+    if (curMonth < 0)  { curMonth = 11; curYear--; }
+    buildCalendar();
+}
+
+function buildCalendar() {
+    document.getElementById('month-label').textContent = `${MONTHS[curMonth]} ${curYear}`;
+    const days = new Date(curYear, curMonth + 1, 0).getDate();
+    const now  = new Date();
+    const isNow = (now.getMonth() === curMonth && now.getFullYear() === curYear);
+    const todayDay = now.getDate();
+    const COL_W = window.innerWidth >= 768 ? 32 : 26;
+
+    const grid = document.getElementById('habit-grid');
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `130px repeat(${days}, ${COL_W}px)`;
+
+    // Header row
+    const corner = document.createElement('div');
+    corner.className = 'grid-corner';
+    corner.textContent = 'Habit';
+    grid.appendChild(corner);
+
+    for (let d = 1; d <= days; d++) {
+        const hdr = document.createElement('div');
+        hdr.className = 'grid-day-hdr' + (isNow && d === todayDay ? ' today-col' : '');
+        hdr.textContent = d;
+        grid.appendChild(hdr);
+    }
+
+    // Habit rows
+    habits.forEach((name, hi) => {
+        const lbl = document.createElement('div');
+        lbl.className = 'habit-label';
+        lbl.textContent = name;
+        grid.appendChild(lbl);
+
+        for (let d = 1; d <= days; d++) {
+            const dateKey = `${curYear}-${String(curMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const key = `${dateKey}-${hi}`;
+            const cell = document.createElement('div');
+            cell.className = 'habit-cell' + (isNow && d === todayDay ? ' today-col' : '');
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (habitData[key] ? ' done' : '');
+            cell.appendChild(dot);
+            cell.onclick = () => {
+                if (habitData[key]) { delete habitData[key]; dot.classList.remove('done'); }
+                else { habitData[key] = true; dot.classList.add('done'); }
+                save('habitData', habitData);
+                syncSheets('habits', habitData);
+            };
+            grid.appendChild(cell);
         }
-        
-        // Load data from Google Sheets on startup
-        async function loadFromGoogleSheets() {
-            if (!GOOGLE_SHEETS_CONFIG.enabled) {
-                return;
-            }
-            
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CONFIG.scriptURL + '?action=load');
-                const data = await response.json();
-                
-                if (data.habits) habitData = data.habits;
-                if (data.sleep) sleepData = data.sleep;
-                if (data.meals) mealData = data.meals;
-                
-                // Update localStorage
-                localStorage.setItem('habitData', JSON.stringify(habitData));
-                localStorage.setItem('sleepData', JSON.stringify(sleepData));
-                localStorage.setItem('mealData', JSON.stringify(mealData));
-                
-                console.log('Data loaded from Google Sheets');
-                updateCalendar();
-                updateSleepChart();
-                updateMealChart();
-                updateMealStats();
-            } catch (error) {
-                console.error('Load error:', error);
-            }
-        }
+    });
+}
 
-        const habits = [
-            'Reading Fatman (10 Pages)',
-            'Getting up at 5:30 or 5:00 AM',
-            'Staying Clean',
-            '1 Chapter of NISM (RA)',
-            'Morning Stretches and Abs',
-            'Eating Meals on Time',
-            'Evening Run (Jogg)',
-            'Reading The News Everyday'
-        ];
+// ── SLEEP ─────────────────────────────────────────────────────────────────────
+function addSleepData() {
+    const date  = document.getElementById('sleep-date').value;
+    const hours = parseFloat(document.getElementById('sleep-hours').value);
+    if (!date || isNaN(hours)) { alert('Please fill in both fields.'); return; }
+    sleepData[date] = hours;
+    save('sleepData', sleepData);
+    syncSheets('sleep', sleepData);
+    updateSleepChart();
+    updateSleepStats();
+    document.getElementById('sleep-hours').value = '';
+}
 
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                       'July', 'August', 'September', 'October', 'November', 'December'];
-        
-        let currentMonth = 4; // May (0-indexed)
-        let currentYear = 2026;
+function updateSleepStats() {
+    const vals = Object.values(sleepData).map(Number).filter(v => !isNaN(v));
+    if (!vals.length) return;
+    document.getElementById('avg-sleep').textContent  = (vals.reduce((a,b) => a+b,0)/vals.length).toFixed(1) + 'h';
+    document.getElementById('best-sleep').textContent = Math.max(...vals).toFixed(1) + 'h';
+    document.getElementById('sleep-days').textContent = vals.length;
+}
 
-        // Page Navigation
-        function showPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if (page === 'tracker') {
-                document.getElementById('tracker-page').classList.add('active');
-                document.querySelector('.nav-btn:nth-child(1)').classList.add('active');
-            } else if (page === 'exercise') {
-                document.getElementById('exercise-page').classList.add('active');
-                document.querySelector('.nav-btn:nth-child(2)').classList.add('active');
-            } else if (page === 'instructions') {
-                document.getElementById('instructions-page').classList.add('active');
-                document.querySelector('.nav-btn:nth-child(3)').classList.add('active');
-            }
-        }
+function updateSleepChart() {
+    const ctx = document.getElementById('sleep-chart').getContext('2d');
+    const days = new Date(curYear, curMonth+1, 0).getDate();
+    const labels = [], data = [];
 
-        // Month Navigation
-        function changeMonth(direction) {
-            currentMonth += direction;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            } else if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            updateCalendar();
-        }
+    for (let d = 1; d <= days; d++) {
+        const key = `${curYear}-${String(curMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        labels.push(d);
+        data.push(sleepData[key] ?? null);
+    }
 
-        // Calendar Generation
-        function updateCalendar() {
-            document.getElementById('current-month').textContent = `${months[currentMonth]} ${currentYear}`;
-            
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const grid = document.getElementById('habit-grid');
-            grid.innerHTML = '';
+    if (sleepChart) sleepChart.destroy();
 
-            // Header row
-            const cornerCell = document.createElement('div');
-            cornerCell.className = 'habit-name';
-            cornerCell.textContent = 'Habit';
-            grid.appendChild(cornerCell);
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day-cell';
-                dayCell.textContent = day;
-                grid.appendChild(dayCell);
-            }
-
-            // Habit rows
-            habits.forEach((habit, habitIndex) => {
-                const nameCell = document.createElement('div');
-                nameCell.className = 'habit-name';
-                nameCell.textContent = habit;
-                grid.appendChild(nameCell);
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'habit-row-cell';
-                    
-                    const dot = document.createElement('div');
-                    dot.className = 'habit-dot';
-                    
-                    const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const habitKey = `${dateKey}-${habitIndex}`;
-                    
-                    if (habitData[habitKey]) {
-                        dot.classList.add('completed');
-                    }
-                    
-                    cell.appendChild(dot);
-                    cell.onclick = () => toggleHabit(habitIndex, day, dot);
-                    grid.appendChild(cell);
-                }
-            });
-        }
-
-        function toggleHabit(habitIndex, day, dotElement) {
-            const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const habitKey = `${dateKey}-${habitIndex}`;
-            
-            if (habitData[habitKey]) {
-                delete habitData[habitKey];
-                dotElement.classList.remove('completed');
-            } else {
-                habitData[habitKey] = true;
-                dotElement.classList.add('completed');
-            }
-            
-            localStorage.setItem('habitData', JSON.stringify(habitData));
-            syncToGoogleSheets('habits', habitData);
-        }
-
-        // Sleep Tracker
-        let sleepChart = null;
-
-        function addSleepData() {
-            const date = document.getElementById('sleep-date').value;
-            const hours = parseFloat(document.getElementById('sleep-hours').value);
-            
-            if (!date || !hours) {
-                alert('Please fill in both date and hours');
-                return;
-            }
-            
-            sleepData[date] = hours;
-            localStorage.setItem('sleepData', JSON.stringify(sleepData));
-            syncToGoogleSheets('sleep', sleepData);
-            updateSleepChart();
-            
-            document.getElementById('sleep-hours').value = '';
-        }
-
-        function updateSleepChart() {
-            const ctx = document.getElementById('sleep-chart').getContext('2d');
-            
-            // Get data for current month
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const labels = [];
-            const data = [];
-            
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                labels.push(day);
-                data.push(sleepData[dateKey] || null);
-            }
-            
-            if (sleepChart) {
-                sleepChart.destroy();
-            }
-            
-            sleepChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Hours Slept',
-                        data: data,
-                        borderColor: '#4a7c59',
-                        backgroundColor: 'rgba(74, 124, 89, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        spanGaps: true
-                    }]
+    sleepChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data,
+                borderColor: '#4a7c59',
+                backgroundColor: (ctx) => {
+                    const { chartArea } = ctx.chart;
+                    if (!chartArea) return 'transparent';
+                    const g = ctx.chart.ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    g.addColorStop(0, 'rgba(74,124,89,0.28)');
+                    g.addColorStop(1, 'rgba(74,124,89,0.02)');
+                    return g;
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 12,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + 'h';
-                                }
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Day of Month'
-                            },
-                            ticks: {
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            }
-                        }
-                    }
+                fill: true, tension: 0.45, spanGaps: true, borderWidth: 2.5,
+                pointRadius: 4, pointHoverRadius: 6,
+                pointBackgroundColor: '#fff', pointBorderColor: '#4a7c59', pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(26,26,26,0.9)',
+                    padding: 10, displayColors: false,
+                    callbacks: { label: ctx => ctx.parsed.y + ' hrs' }
                 }
-            });
-        }
-
-        // Meal Timing Tracker
-        let mealChart = null;
-
-        function addMealData() {
-            const date = document.getElementById('meal-date').value;
-            const breakfast = document.getElementById('breakfast-time').value;
-            const lunch = document.getElementById('lunch-time').value;
-            const dinner = document.getElementById('dinner-time').value;
-            
-            if (!date || !breakfast || !lunch || !dinner) {
-                alert('Please fill in all meal times');
-                return;
-            }
-            
-            mealData[date] = { breakfast, lunch, dinner };
-            localStorage.setItem('mealData', JSON.stringify(mealData));
-            syncToGoogleSheets('meals', mealData);
-            updateMealChart();
-            updateMealStats();
-            
-            document.getElementById('breakfast-time').value = '';
-            document.getElementById('lunch-time').value = '';
-            document.getElementById('dinner-time').value = '';
-        }
-
-        function timeToDecimal(timeStr) {
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            return hours + minutes / 60;
-        }
-
-        function updateMealStats() {
-            const statsContainer = document.getElementById('meal-stats');
-            const dates = Object.keys(mealData).sort();
-            
-            if (dates.length === 0) {
-                statsContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Add meal times to see statistics</p>';
-                return;
-            }
-            
-            let totalBreakfastLunch = 0;
-            let totalLunchDinner = 0;
-            let count = 0;
-            
-            dates.forEach(date => {
-                const meals = mealData[date];
-                const breakfastTime = timeToDecimal(meals.breakfast);
-                const lunchTime = timeToDecimal(meals.lunch);
-                const dinnerTime = timeToDecimal(meals.dinner);
-                
-                totalBreakfastLunch += lunchTime - breakfastTime;
-                totalLunchDinner += dinnerTime - lunchTime;
-                count++;
-            });
-            
-            const avgBreakfastLunch = (totalBreakfastLunch / count).toFixed(1);
-            const avgLunchDinner = (totalLunchDinner / count).toFixed(1);
-            
-            statsContainer.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-label">Avg. Breakfast → Lunch Gap</div>
-                    <div class="stat-value">${avgBreakfastLunch}h</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Avg. Lunch → Dinner Gap</div>
-                    <div class="stat-value">${avgLunchDinner}h</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Days Tracked</div>
-                    <div class="stat-value">${count}</div>
-                </div>
-            `;
-        }
-
-        function updateMealChart() {
-            const ctx = document.getElementById('meal-chart').getContext('2d');
-            
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const labels = [];
-            const breakfastData = [];
-            const lunchData = [];
-            const dinnerData = [];
-            
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                labels.push(day);
-                
-                if (mealData[dateKey]) {
-                    breakfastData.push(timeToDecimal(mealData[dateKey].breakfast));
-                    lunchData.push(timeToDecimal(mealData[dateKey].lunch));
-                    dinnerData.push(timeToDecimal(mealData[dateKey].dinner));
-                } else {
-                    breakfastData.push(null);
-                    lunchData.push(null);
-                    dinnerData.push(null);
-                }
-            }
-            
-            if (mealChart) {
-                mealChart.destroy();
-            }
-            
-            mealChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Breakfast',
-                            data: breakfastData,
-                            borderColor: '#f4a261',
-                            backgroundColor: 'rgba(244, 162, 97, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 4,
-                            spanGaps: true
-                        },
-                        {
-                            label: 'Lunch',
-                            data: lunchData,
-                            borderColor: '#e76f51',
-                            backgroundColor: 'rgba(231, 111, 81, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 4,
-                            spanGaps: true
-                        },
-                        {
-                            label: 'Dinner',
-                            data: dinnerData,
-                            borderColor: '#264653',
-                            backgroundColor: 'rgba(38, 70, 83, 0.1)',
-                            tension: 0.4,
-                            pointRadius: 4,
-                            spanGaps: true
-                        }
-                    ]
+            },
+            scales: {
+                y: {
+                    min: 0, max: 12,
+                    grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                    ticks: { callback: v => v + 'h', font: { size: 10 }, color: '#aaa' }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 6,
-                            max: 24,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + ':00';
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Time of Day (24h)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Day of Month'
-                            },
-                            ticks: {
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            }
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    ticks: { autoSkip: false, maxRotation: 0, font: { size: 9 }, color: '#aaa' }
+                }
+            }
+        }
+    });
+}
+
+// ── MEALS ─────────────────────────────────────────────────────────────────────
+function addMealData() {
+    const date = document.getElementById('meal-date').value;
+    const b    = document.getElementById('breakfast-time').value;
+    const l    = document.getElementById('lunch-time').value;
+    const d    = document.getElementById('dinner-time').value;
+    if (!date || !b || !l || !d) { alert('Please fill in the date and all three meal times.'); return; }
+    mealData[date] = { b, l, d };
+    save('mealData', mealData);
+    syncSheets('meals', mealData);
+    updateMealChart();
+    updateMealStats();
+    ['breakfast-time','lunch-time','dinner-time'].forEach(id => document.getElementById(id).value = '');
+}
+
+function toDecimal(t) {
+    const [h, m] = t.split(':').map(Number);
+    return h + m / 60;
+}
+
+function updateMealStats() {
+    const entries = Object.values(mealData);
+    if (!entries.length) return;
+    let bl = 0, ld = 0;
+    entries.forEach(e => { bl += toDecimal(e.l) - toDecimal(e.b); ld += toDecimal(e.d) - toDecimal(e.l); });
+    const n = entries.length;
+    document.getElementById('bl-gap').textContent   = (bl/n).toFixed(1) + 'h';
+    document.getElementById('ld-gap').textContent   = (ld/n).toFixed(1) + 'h';
+    document.getElementById('meal-days').textContent = n;
+}
+
+function updateMealChart() {
+    const ctx = document.getElementById('meal-chart').getContext('2d');
+    const days = new Date(curYear, curMonth+1, 0).getDate();
+    const labels = [], bD = [], lD = [], dD = [];
+
+    for (let day = 1; day <= days; day++) {
+        const key = `${curYear}-${String(curMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        labels.push(day);
+        bD.push(mealData[key] ? toDecimal(mealData[key].b) : null);
+        lD.push(mealData[key] ? toDecimal(mealData[key].l) : null);
+        dD.push(mealData[key] ? toDecimal(mealData[key].d) : null);
+    }
+
+    if (mealChart) mealChart.destroy();
+
+    const makeGrad = (chart, r, g, b) => {
+        const { chartArea } = chart;
+        if (!chartArea) return 'transparent';
+        const gr = chart.ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gr.addColorStop(0, `rgba(${r},${g},${b},0.22)`);
+        gr.addColorStop(1, `rgba(${r},${g},${b},0.02)`);
+        return gr;
+    };
+
+    const ds = (label, color, rgb, data) => ({
+        label, data,
+        borderColor: color,
+        backgroundColor: ctx => makeGrad(ctx.chart, ...rgb),
+        fill: true, tension: 0.4, spanGaps: true, borderWidth: 2.5,
+        pointRadius: 4, pointHoverRadius: 6,
+        pointBackgroundColor: '#fff', pointBorderColor: color, pointBorderWidth: 2
+    });
+
+    mealChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                ds('Breakfast', '#f4a261', [244,162,97], bD),
+                ds('Lunch',     '#e76f51', [231,111,81], lD),
+                ds('Dinner',    '#264653', [38,70,83],   dD)
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(26,26,26,0.9)',
+                    padding: 10, usePointStyle: true,
+                    callbacks: {
+                        label: ctx => {
+                            const h = Math.floor(ctx.parsed.y);
+                            const m = Math.round((ctx.parsed.y - h) * 60);
+                            return `${ctx.dataset.label}: ${h}:${String(m).padStart(2,'0')}`;
                         }
                     }
                 }
-            });
+            },
+            scales: {
+                y: {
+                    min: 5, max: 24,
+                    grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                    ticks: { callback: v => v + ':00', font: { size: 10 }, color: '#aaa' }
+                },
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    ticks: { autoSkip: false, maxRotation: 0, font: { size: 9 }, color: '#aaa' }
+                }
+            },
+            interaction: { intersect: false, mode: 'index' }
         }
+    });
+}
 
-        // Initialize
-        function init() {
-            // Set default dates to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('sleep-date').value = today;
-            document.getElementById('meal-date').value = today;
-            
-            updateCalendar();
-            updateSleepChart();
-            updateMealChart();
-            updateMealStats();
-            
-            // Load data from Google Sheets if enabled
-            loadFromGoogleSheets();
-        }
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function save(key, val) {
+    localStorage.setItem(key, JSON.stringify(val));
+}
 
-        init();
-    </script>
+async function syncSheets(type, data) {
+    if (!SHEETS.enabled) return;
+    try {
+        await fetch(SHEETS.scriptURL, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type, data })
+        });
+    } catch(e) { console.warn('Sync failed:', e); }
+}
+
+async function loadSheets() {
+    if (!SHEETS.enabled) return;
+    try {
+        const res  = await fetch(SHEETS.scriptURL + '?action=load');
+        const data = await res.json();
+        if (data.habits) { habitData = data.habits; save('habitData', habitData); }
+        if (data.sleep)  { sleepData = data.sleep;  save('sleepData', sleepData); }
+        if (data.meals)  { mealData  = data.meals;  save('mealData',  mealData); }
+        buildCalendar();
+    } catch(e) { console.warn('Load failed:', e); }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+
+    document.getElementById('today-badge').textContent =
+        today.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short' });
+
+    document.getElementById('sleep-date').value = todayStr;
+    document.getElementById('meal-date').value  = todayStr;
+
+    buildCalendar();
+    updateSleepStats();
+    updateMealStats();
+    loadSheets();
+}
+
+init();
+</script>
 </body>
 </html>
